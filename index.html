@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flixify Projects</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: #0d0d1a; /* Darker background */
+            color: #eaeaea; /* Lighter text color */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-top: 50px;
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            text-align: center;
+            color: #ffcc00; /* Accent color for the title */
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 20px auto;
+            flex-wrap: wrap;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #ffcc00; /* Accent color for arrows */
+            cursor: pointer;
+            user-select: none;
+            margin: 0 20px;
+            transition: transform 0.3s;
+        }
+
+        .arrow:hover {
+            transform: scale(1.2);
+            color: #ffdc73; /* Slightly lighter on hover */
+        }
+
+        .project-card {
+            background-color: #1f1f3d; /* Darker card background */
+            color: #ffffff; /* White text on cards */
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* Enhanced shadow */
+            margin: 15px;
+            padding: 30px;
+            text-align: left;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 300px;
+            height: 250px; /* Height for better layout */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: scale(1.05); /* Slight increase on hover */
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7); /* Stronger shadow on hover */
+        }
+
+        .project-card h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+            font-weight: bold; /* Make project title bold */
+            color: #ffcc00; /* Accent color for project titles */
+        }
+
+        .project-card p {
+            font-size: 1rem;
+            margin: 10px 0;
+            flex-grow: 1; /* Allow paragraph to take up available space */
+            color: #eaeaea; /* Slightly lighter text for descriptions */
+        }
+
+        .project-card a {
+            background-color: #16213e; /* Dark button background */
+            color: #ffffff; /* White text on button */
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s;
+            align-self: flex-start; /* Align button to the left */
+            border: 1px solid #ffcc00; /* Border to make buttons distinctive */
+        }
+
+        .project-card a:hover {
+            background-color: #0f3460; /* Darker on hover */
+            transform: translateY(-2px); /* Lift button slightly on hover */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Subtle lift effect */
+        }
+
+        @media (max-width: 768px) {
+            /* Responsive styling for smaller screens */
+            .container {
+                flex-direction: column;
+            }
+            .arrow {
+                margin: 20px 0;
+            }
+            .project-card {
+                width: 90%; /* Full width on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>My Awesome Projects</h1>
+
+<div class="container">
+    <div class="arrow" id="prev"><i class="fas fa-chevron-left"></i></div>
+    <div class="project-card" id="currentBox"></div>
+    <div class="arrow" id="next"><i class="fas fa-chevron-right"></i></div>
+</div>
+
+<script>
+    const username = 'flixifytvisbackformoregithub'; // Your GitHub username
+    const url = `https://api.github.com/users/${username}/repos`;
+    let currentIndex = 0;
+    let projects = [];
+
+    async function fetchProjects() {
+        const response = await fetch(url);
+        if (response.ok) {
+            projects = await response.json();
+            displayCurrentBox();
+        } else {
+            console.error('Failed to fetch projects.');
+        }
+    }
+
+    function displayCurrentBox() {
+        const currentBox = document.getElementById('currentBox');
+        if (projects.length > 0) {
+            currentBox.innerHTML = `
+                <h2>${projects[currentIndex].name}</h2>
+                <p>${projects[currentIndex].description || 'No description available.'}</p>
+                <a href="${projects[currentIndex].html_url}" target="_blank">View Project</a>
+            `;
+        } else {
+            currentBox.innerHTML = `<p>No projects found.</p>`;
+        }
+    }
+
+    document.getElementById('prev').onclick = () => {
+        if (projects.length > 0) {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : projects.length - 1;
+            displayCurrentBox();
+        }
+    };
+
+    document.getElementById('next').onclick = () => {
+        if (projects.length > 0) {
+            currentIndex = (currentIndex < projects.length - 1) ? currentIndex + 1 : 0;
+            displayCurrentBox();
+        }
+    };
+
+    fetchProjects();
+</script>
+
+</body>
+</html>
