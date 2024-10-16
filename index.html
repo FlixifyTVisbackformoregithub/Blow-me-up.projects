@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flixify Projects</title>
+    <title>Blow-me-up!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            background: #0d0d1a; /* Darker background */
-            color: #eaeaea; /* Lighter text color */
+            background: #0d0d1a;
+            color: #eaeaea;
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -22,7 +22,7 @@
             font-size: 3.5rem;
             letter-spacing: 2px;
             text-align: center;
-            color: #ffcc00; /* Accent color for the title */
+            color: #ffcc00;
         }
 
         .container {
@@ -35,7 +35,7 @@
 
         .arrow {
             font-size: 2rem;
-            color: #ffcc00; /* Accent color for arrows */
+            color: #ffcc00;
             cursor: pointer;
             user-select: none;
             margin: 0 20px;
@@ -44,20 +44,20 @@
 
         .arrow:hover {
             transform: scale(1.2);
-            color: #ffdc73; /* Slightly lighter on hover */
+            color: #ffdc73;
         }
 
         .project-card {
-            background-color: #1f1f3d; /* Darker card background */
-            color: #ffffff; /* White text on cards */
+            background-color: #1f1f3d;
+            color: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* Enhanced shadow */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
             margin: 15px;
             padding: 30px;
             text-align: left;
             transition: transform 0.3s, box-shadow 0.3s;
             width: 300px;
-            height: 250px; /* Height for better layout */
+            height: 250px; 
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -66,43 +66,42 @@
         }
 
         .project-card:hover {
-            transform: scale(1.05); /* Slight increase on hover */
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7); /* Stronger shadow on hover */
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7);
         }
 
         .project-card h2 {
             margin: 0 0 10px 0;
             font-size: 1.5rem;
-            font-weight: bold; /* Make project title bold */
-            color: #ffcc00; /* Accent color for project titles */
+            font-weight: bold;
+            color: #ffcc00;
         }
 
         .project-card p {
             font-size: 1rem;
             margin: 10px 0;
-            flex-grow: 1; /* Allow paragraph to take up available space */
-            color: #eaeaea; /* Slightly lighter text for descriptions */
+            flex-grow: 1;
+            color: #eaeaea;
         }
 
         .project-card a {
-            background-color: #16213e; /* Dark button background */
-            color: #ffffff; /* White text on button */
+            background-color: #16213e;
+            color: #ffffff;
             padding: 10px 15px;
             border-radius: 5px;
             text-decoration: none;
             transition: background-color 0.3s, transform 0.3s;
-            align-self: flex-start; /* Align button to the left */
-            border: 1px solid #ffcc00; /* Border to make buttons distinctive */
+            align-self: flex-start;
+            border: 1px solid #ffcc00;
         }
 
         .project-card a:hover {
-            background-color: #0f3460; /* Darker on hover */
-            transform: translateY(-2px); /* Lift button slightly on hover */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Subtle lift effect */
+            background-color: #0f3460;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
 
         @media (max-width: 768px) {
-            /* Responsive styling for smaller screens */
             .container {
                 flex-direction: column;
             }
@@ -110,7 +109,7 @@
                 margin: 20px 0;
             }
             .project-card {
-                width: 90%; /* Full width on small screens */
+                width: 90%; 
             }
         }
     </style>
@@ -127,7 +126,7 @@
 
 <script>
     const username = 'flixifytvisbackformoregithub'; // Your GitHub username
-    const url = `https://api.github.com/users/${username}/repos?per_page=100`;
+    const url = `https://api.github.com/users/${username}/repos?per_page=1000`;
     let currentIndex = 0;
     let projects = [];
 
@@ -136,14 +135,14 @@
         if (response.ok) {
             const newProjects = await response.json();
             projects = projects.concat(newProjects);
+            // Check if we received 100 projects, continue fetching
             if (newProjects.length === 100 && projects.length < 1000) {
-                // Fetch the next page if we haven't reached 1000 yet
                 fetchProjects(page + 1);
             } else {
                 displayCurrentBox();
             }
         } else {
-            console.error('Failed to fetch projects.');
+            console.error('Failed to fetch projects:', response.statusText);
         }
     }
 
@@ -152,11 +151,11 @@
         if (projects.length > 0) {
             currentBox.innerHTML = `
                 <h2>${projects[currentIndex].name}</h2>
-                <p>${projects[currentIndex].description || 'No description available.'}</p>
-                <a href="${projects[currentIndex].html_url}" target="_blank">View Project</a>
+                <p>${projects[currentIndex].description || 'This repo has no description'}</p>
+                <a href="${projects[currentIndex].html_url}" target="_blank">Visit on Github!</a>
             `;
         } else {
-            currentBox.innerHTML = `<p>No projects found.</p>`;
+            currentBox.innerHTML = `<p>User has no Github repos</p>`;
         }
     }
 
