@@ -127,15 +127,21 @@
 
 <script>
     const username = 'flixifytvisbackformoregithub'; // Your GitHub username
-    const url = `https://api.github.com/users/${username}/repos`;
+    const url = `https://api.github.com/users/${username}/repos?per_page=100`;
     let currentIndex = 0;
     let projects = [];
 
-    async function fetchProjects() {
-        const response = await fetch(url);
+    async function fetchProjects(page = 1) {
+        const response = await fetch(`${url}&page=${page}`);
         if (response.ok) {
-            projects = await response.json();
-            displayCurrentBox();
+            const newProjects = await response.json();
+            projects = projects.concat(newProjects);
+            if (newProjects.length === 100 && projects.length < 1000) {
+                // Fetch the next page if we haven't reached 1000 yet
+                fetchProjects(page + 1);
+            } else {
+                displayCurrentBox();
+            }
         } else {
             console.error('Failed to fetch projects.');
         }
